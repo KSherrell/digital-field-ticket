@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <base target="_top">
+    <meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Lato:light|Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> 
+    <?!= include('fieldTicketCSS'); ?>
+
+    <title>Field Ticket example</title>
+</head>
+
+         <body>
+<div class="container">
+
+        <header>
+
+            <h5>Field Ticket example</h5>
+        </header>
+
+        <main>
+            <form id="formFieldTicket">
+                <div class='row'>
+                    <div class="col s12">
+                        <h6>Measurement Tech:
+                            <span id='techName' class='fieldTech'>
+                                <?= techEmail; ?> </span>
+                        </h6>
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class="col s12">
+                        <h6>Date:
+                            <span id='jsDate' class='fieldTech'></span>
+                        </h6>
+                    </div>
+                </div>
+
+                <div class='row times'>
+                    <h6 class='col s12'>Start Ticket</h6>
+                    <div class='input-field col s6 align-center'>
+                        <input id="mileStart" class='jsOdoCheck' type="text" />
+                        <label for="mileStart" class='active'>odometer (last 4)</label>
+                    </div>
+                    <div class='col s6 taCenter'>
+                        <!-- click to enter currentTime into text field-->
+                    <!-- <button id='btnTimeStart' class="waves-effect waves-light btn timeBtns"><i class="material-icons left">alarm</i>start</button>-->
+                        <input type='time' id='timeStart' required style="text-align: center; margin-top: 13px; margin-bottom:0" /><label>time start</label>
+                    </div>
+
+
+                </div>
+
+
+                <div class='row'>
+                    <div class="input-field col s12">
+                        <h6>Select Customer:</h6>
+                        <select id="selectCompany" class="browser-default">
+                            <option disabled selected>select customer</option>
+
+                            <? for(var i = 0; i < companyList.length; i++){ ?>
+                            <option>
+                                <?= companyList[i] ?>
+                            </option>
+                            <? } ?>
+
+                        </select>
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class="input-field col s12">
+                        <h6>Select Location or RC#:</h6>
+                        <select id="selectLocation" class="browser-default">
+                            <option disabled selected>select location</option>
+
+                        </select>
+                    </div>
+                </div>
+
+
+
+
+                <div class='row'>
+                    <h6 class='col s12'>Meters</h6>
+                    <!--
+                            <div class="collapsible-header"><i class="material-icons">border_color</i>
+                                <p>Click to enter meter observations.</p>
+                            </div>
+-->
+
+
+                </div>
+                 <div id='appending'>
+                    <div id = "meterDiv0" class='row times'>
+                        <!-- <div class='input-field col s4 topmar25'>
+                            <input id="meterID0" type="text" disabled />
+                            <label for="meterID0" class="active">Meter ID</label>
+                        </div> -->
+                        <div class='col s12 topmar25'>
+                             <select id="selectMeterName0" class="browser-default step jsMeterList">
+                                <option disabled selected>STEP 1: Select meter name</option>
+
+                            </select>
+                        </div>
+                        <div id="tasks0">
+                            <p class="col s12 topmar25 step">STEP 2: Select all tasks performed</p>
+                            <div class='col s6 topmar25'>
+
+                                <label>
+                                    <input type="checkbox" id='MeterProving0' class="filled-in" />
+                                    <span>Meter proving</span>
+                                </label>
+                            </div>
+                            <div class='col s6 topmar25'>
+                                <label>
+                                    <input type="checkbox" id='GrindOut0' class="filled-in" />
+                                    <span>Grindout</span>
+                                </label>
+                            </div>
+
+                            <div class='col s6 topmar25'>
+                                <label>
+                                    <input type="checkbox" id='RVP0' class="filled-in" />
+                                    <span>RVP</span>
+                                </label>
+                            </div>
+                             <div class='col s6 topmar25'>
+                                <label>
+                                    <input type="checkbox" id='Other0' class="filled-in" />
+                                    <span>Other</span>
+                                </label>
+                            </div>
+                            
+                            <div class='input-field col s12'>
+                                <input id="meterComments0" type="text" />
+                                <label for="otherText">Comments</label>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+               
+
+                <a id='btnAddMeter' class="waves-effect waves-light btn-small"><i class="material-icons left">add</i>add a blank meter section</a>
+
+                <div class='row topmar25'>
+                    <h6 class='col s12 topmar25'>Parts</h6>
+
+                    <div id="parts">
+
+                        <div>
+                            <div class='input-field col s4 topmar25'>
+                                <input id="partsQty1" type="text">
+                                <label for="partsQty1" class='active'>PO#</label>
+                            </div>
+                            <div class='input-field col s8 topmar25'>
+                                <input id="partsDesc1" type="text">
+                                <label for="partsDesc1" class='active'>Description</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='row'>
+                    <h6 class='col s12'>Notes</h6>
+                    <div class='input-field col s12'>
+                        <textarea id="notes" class="materialize-textarea"></textarea>
+                        <label for="notes">Notes</label>
+                    </div>
+
+                </div>
+
+                <div class='row miles'>
+                    <h6 class='col s12'>End Ticket</h6>
+
+                    <div class='input-field col s6 align-center'>
+                        <input id="mileEnd" type="text" />
+                        <label for="mileEnd">odometer (last 4)</label>
+                    </div>
+                    <div class='col s6 taCenter'>
+                        <!-- click to enter currentTime into text field-->
+                        <!--<button id="btnTimeEnd" class="waves-effect waves-light btn timeBtns"><i class="material-icons right">alarm_off</i>end</button>-->
+                        <input type='time' id='timeEnd' style="text-align: center; margin-top: 13px; margin-bottom:0" /><label>time end</label>
+                    </div>
+
+                </div>
+
+                <div class='row resetSubmit'>
+                    <div class='col s6  center-align'>
+                        <button id="btnReset" class="waves-effect waves-light btn blue-grey lighten-1"><i class="material-icons left">autorenew</i>reset</button>
+                    </div>
+                    <div class='col s6  center-align'>
+                        <button id="btnSubmit" class="waves-effect waves-light btn"><i class="material-icons left">send</i>Submit</button>
+                    </div>
+                </div>
+            </form>
+        </main>
+        <footer><div id="loader"></div></footer>
+        
+   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script> 
+   <?!= include('fieldTicketJS'); ?>
+
+</div>
+</body>
+
+</html>

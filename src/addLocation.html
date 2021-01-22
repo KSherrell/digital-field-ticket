@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <base target="_top">
+    <meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Lato:light|Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> 
+    <?!= include('brandiDash_CSS'); ?>
+
+    <title>Add a location to the database</title>
+</head>
+
+         <body>
+<div class="container">
+        <header>
+        </header>
+        <main>
+            <form id="addLocationForm">
+
+                <div class='row'>
+                    <div class="input-field col s12">
+                        <h6>Select Customer:</h6>
+                        <select id="selectCompany" class="browser-default">
+                            <option disabled selected>select customer</option>
+                        </select>
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class="input-field col s12">
+                        <h6>Input Location Name</h6>
+                                <div class='input-field col s12'>
+                                <input id="newLocName" class="autocomplete" type="text" />
+                                <label for="newLocName"></label>
+                            </div>
+                    </div>
+                </div>
+
+                <div class='row'>
+                    <div class="input-field col s12">
+                        <h6>Input Meter Id</h6>
+                                <div class='input-field col s12'>
+                                <input id="newMeterId" class="autocomplete" type="text" />
+                                <label for="newMeterId"></label>
+                            </div>
+                    </div>
+                </div>
+
+   
+                <div class='row resetSubmit'>
+                    <div class='col s5  center-align'>
+                        <button id="btnResetAddLocForm" class="waves-effect waves-light btn blue-grey lighten-1">reset</button>
+                    </div>
+                    <div class='col s5  center-align'>
+                        <button id="btnSubmitAddLocForm" class="waves-effect waves-light btn"><i class="material-icons left">send</i>Submit</button>
+                    </div>
+                </div>
+            </form>
+        </main>
+        <footer></footer>
+        
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+            
+   <?!= include('brandiDash_JS'); ?>
+
+</div>
+</body>
+
+</html>

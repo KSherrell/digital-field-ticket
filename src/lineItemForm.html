@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <base target="_top">
+    <meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Lato:light|Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> 
+    <?!= include('brandiDash_CSS'); ?>
+
+    <title>Add a missing field ticket</title>
+</head>
+
+         <body>
+<div class="container">
+        <header>
+        </header>
+        <main>
+            <form id="formFieldTicket">
+                <div class='row'>
+                    <div class="col s12">
+                        <h6>Measurement Tech:
+                        </h6>
+                        <p style="color:cadetblue;font-size:.9rem">Please enter the tech name as <br/> [first initial] [last name]<br/> for example, 'swilson' for Steve Wilson.
+                        </p>
+                      <div class='input-field col s12 align-center'>
+                        <input id="jsTechName" class='fieldTech' type="text" />
+                        <label for="jsTechName" class='active'>tech name</label>
+                      </div>
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class="col s12">
+                        <h6>Date:
+                            <!-- <span id='jsDate' class='fieldTech'></span> -->
+                        </h6>
+                      <div class='input-field col s12 align-center'>
+                        <input id="jsDate" class='fieldTech' type="date" />
+                        <label for="jsDate" class='active'>date work performed</label>
+                      </div>
+                    </div>
+                </div>
+
+                <div class='row times'>
+                               
+                    <div class='col s6'>
+                        <input type='time' id='timeStart' style="text-align: center; margin-top: 13px; margin-bottom:0" /><label>time start</label>
+                    </div>
+                    <div class='col s6'>
+                        <input type='time' id='timeEnd' style="text-align: center; margin-top: 13px; margin-bottom:0" /><label>time end</label>
+                    </div>
+
+                </div>
+                
+                <div class='row miles topmar25'>
+                 <div class='input-field col s6 align-center'>
+                        <input id="mileStart" class='jsOdoCheck' type="text" />
+                        <label for="mileStart" class="active">start odometer(last 4)</label>
+                    </div>
+                    <div class='input-field col s6 align-center'>
+                        <input id="mileEnd" type="text" />
+                        <label for="mileEnd" class="active">end odometer(last 4)</label>
+                    </div>
+                   
+                </div>
+                
+                
+
+
+                <div class='row'>
+                    <div class="input-field col s12">
+                        <h6>Select Customer:</h6>
+                        <select id="selectCompany" class="browser-default">
+                            <option disabled selected>select customer</option>
+                        </select>
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class="input-field col s12">
+                        <h6>Select Location or RC#:</h6>
+                        <select id="selectLocation" class="browser-default">
+                            <option disabled selected>select location</option>
+
+                        </select>
+                    </div>
+                </div>
+
+
+
+
+                <div class='row'>
+                    <h6 class='col s12'>Meters</h6>
+                </div>
+                 <div id='appending'>
+                    <div id = "meterDiv0" class='row times'>
+                        <!-- <div class='input-field col s4 topmar25'>
+                            <input id="meterID0" type="text" disabled />
+                            <label for="meterID0" class="active">Meter ID</label>
+                        </div> -->
+                        <div class='col s12 topmar25'>
+                             <select id="selectMeterName0" class="browser-default step jsMeterList">
+                                <option disabled selected>STEP 1: Select meter name</option>
+
+                            </select>
+                        </div>
+                        <div id="tasks0">
+                            <p class="col s12 topmar25 step">STEP 2: Select all tasks performed</p>
+                            <div class='col s6 topmar25'>
+
+                                <label>
+                                    <input type="checkbox" id='MeterProving0' class="filled-in" />
+                                    <span>Meter proving</span>
+                                </label>
+                            </div>
+                            <div class='col s6 topmar25'>
+                                <label>
+                                    <input type="checkbox" id='GrindOut0' class="filled-in" />
+                                    <span>Grindout</span>
+                                </label>
+                            </div>
+
+                            <div class='col s6 topmar25'>
+                                <label>
+                                    <input type="checkbox" id='RVP0' class="filled-in" />
+                                    <span>RVP</span>
+                                </label>
+                            </div>
+                             <div class='col s6 topmar25'>
+                                <label>
+                                    <input type="checkbox" id='Other0' class="filled-in" />
+                                    <span>Other</span>
+                                </label>
+                            </div>
+                            
+                            <div class='input-field col s12'>
+                                <input id="meterComments0" type="text" />
+                                <label for="otherText">Comments</label>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+               
+
+                <a id='btnAddMeter' class="waves-effect waves-light btn-small"><i class="material-icons left">add</i>add a blank meter section</a>
+
+                <div class='row topmar25'>
+                    <h6 class='col s12 topmar25'>Parts</h6>
+
+                    <div id="parts">
+
+                        <div>
+                            <div class='input-field col s4 topmar25'>
+                                <input id="partsQty1" type="text">
+                                <label for="partsQty1" class='active'>PO#</label>
+                            </div>
+                            <div class='input-field col s8 topmar25'>
+                                <input id="partsDesc1" type="text">
+                                <label for="partsDesc1" class='active'>Description</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='row'>
+                    <h6 class='col s12'>Notes</h6>
+                    <div class='input-field col s12'>
+                        <textarea id="notes" class="materialize-textarea"></textarea>
+                        <label for="notes">Notes</label>
+                    </div>
+
+                </div>
+
+                
+
+                <div class='row resetSubmit'>
+                    <div class='col s3  center-align'>
+                        <button id="btnReset" class="waves-effect waves-light btn blue-grey lighten-1">reset</button>
+                    </div>
+                    <div class='col s6  center-align'>
+                        <button id="btnSubmit" class="waves-effect waves-light btn"><i class="material-icons left">send</i>Submit</button>
+                    </div>
+                </div>
+            </form>
+        </main>
+        <footer></footer>
+        
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> 
+   <?!= include('brandiDash_JS'); ?>
+
+</div>
+</body>
+
+</html>

@@ -1,0 +1,446 @@
+<script>
+$("#selectCompany").change(function(){
+let companyName = $("#selectCompany").val();
+google.script.run.withSuccessHandler(youAutocompleteMe).getLocationsList(companyName);
+      function youAutocompleteMe(dataObj){
+             $('#newLocName').autocomplete({
+            data: dataObj ,
+          });
+       }
+})
+
+$("#newLocName").change(function(){
+let companyName = $("#selectCompany").val();
+let newLocName = $("#newLocName").val();
+
+google.script.run.withSuccessHandler(youAutocompleteMe).getMeterList(companyName, newLocName);
+
+      function youAutocompleteMe(dataObj){
+           $('#newMeterId').autocomplete({
+            data: dataObj ,
+          });
+       }
+})
+
+
+//add another meter segment
+$('#btnAddMeter').click(function (e) {
+e.preventDefault();
+//just get the meterCount 
+let meterCount = $('form').find(".jsMeterList").length;
+addAnotherMeterSegment(meterCount);
+});
+
+
+function addAnotherMeterSegment(meterCount) {
+//add meter segment -- don't judge me -- Griffey gets the upgraded functionality on this 
+let appendage = '<div id="meterDiv'+meterCount+'" class="row times topmar25">\
+<div class="input-field col s12 topmar25 step">\
+<select id="selectMeterName'+meterCount+'" class="browser-default step jsMeterList">\
+<option disabled selected>STEP 1: Select meter name</option>\
+</select>\
+</div>\
+<div id="tasks'+meterCount+'" class="row">\
+<p class="col s12 topmar25 step">STEP 2: Select all tasks performed</p>\
+<div class="col s6 topmar25">\
+<label for = "MeterProving'+meterCount+'">\
+<input type="checkbox" id="MeterProving'+meterCount+'" name class="filled-in"/>\
+<span> Meter proving </span>\
+</label>\
+</div>\
+<div class="col s6 topmar25">\
+<label for = "GrindOut'+meterCount+'" >\
+<input type="checkbox" id="GrindOut'+meterCount+'" class="filled-in"/>\
+<span> Grindout </span>\
+</label>\
+</div>\
+<div class="col s6 topmar25">\
+<label for = "RVP'+meterCount+'" >\
+<input type="checkbox" id="RVP'+meterCount+'" class="filled-in" />\
+<span> RVP </span>\
+</label>\
+</div>\
+<div class="col s6 topmar25">\
+<label>\
+<input type="checkbox" id="Other'+meterCount+'" class="filled-in" />\
+<span> Other </span>\
+</label>\
+</div>\
+<div class="input-field col s12">\
+<input id="meterComments'+meterCount+'" type="text" />\
+<label for = "meterComments'+meterCount+'" > Comments </label>\
+</div>\
+</div>\
+</div>\
+</div>';
+
+//****** don't forget to validate the previous meter data -- make sure at least one task is selected ******
+let prevMeter = meterCount - 1;
+let prevMeterName = `#selectMeterName${prevMeter}`;
+let prevTasks = `#tasks${prevMeter}`;
+let taskMaster = $(prevTasks + ' input.filled-in');
+let prevLocation = "select: " + $('#selectLocation').val();  
+
+let tasksArr = [];
+//are any boxes checked?
+let tskLen = taskMaster.length;
+for (let i = 0; i < tskLen; i++) {
+tasksArr.push(taskMaster[i].checked);
+}
+let didYouDoAnyWork = tasksArr.includes(true);
+
+//maybe just check for the word 'select' 
+if($(prevMeterName).val() == "STEP 1: Select meter name"){
+alert('You must select a Location or RC');
+
+}else if ($(prevMeterName).val() == prevLocation) {
+alert('Choose a meter location');
+$(prevMeterName).focus();
+
+} else if (!didYouDoAnyWork) {
+alert('Select at least one task.');
+
+} else {
+$(appendage).appendTo($('#appending'));
+let companyName = $('#selectCompany').val();
+let companyLocation = $('#selectLocation').val();
+google.script.run.withSuccessHandler(addNewestMeterListHtml).createMeterListArr(companyLocation, companyName);
+}
+};
+
+
+//create the meter lists and populate the newest meterList
+function addNewestMeterListHtml(meterListArr){
+
+let meterCount = $('form').find(".jsMeterList").length;
+meterCount--;
+let len = meterListArr.length;
+let meterListHtml = '';
+for (let i = 1; i < len; i++) {
+meterListHtml += `<option>${meterListArr[i][0]}</option>`;
+}
+$('#selectMeterName' + meterCount).html(meterListHtml);
+};
+
+//is it four digits? 
+//bug fix: does it have a leading zero? if yes, accept it! 
+
+function validateLastFour(lastFour) {
+let regex = /^[0-9]\w{3}$/; 
+let testRegex = regex.test(lastFour);
+return testRegex;
+};
+
+
+function validatingFormData() {
+$('#loader').show();
+
+let formObj = {};
+
+//so that I may easily trim whitespace from email
+let techName = $('#jsTechName').val();
+
+//capture all that delicious data to the formObj
+formObj.techName = $.trim(techName);
+formObj.theDate = $('#jsDate').val();
+//console.log(formObj.theDate);
+
+//grab the times
+let timeStart = $('#timeStart').val();
+let timeEnd = $('#timeEnd').val();
+
+if (timeStart == '') {
+$('#loader').hide();
+alert('Start time is required');
+$('#timeStart').focus();
+$('#btnSubmit').attr('disabled', false);
+}
+
+if (timeEnd == '') {
+$('#loader').hide();
+alert('End time is required');
+$('#timeEnd').focus();
+$('#btnSubmit').attr('disabled', false);
+}
+
+if(timeEnd < timeStart){
+$('#loader').hide();
+alert('End time must be later than start time');
+$('#timeEnd').focus();
+$('#btnSubmit').attr('disabled', false);
+} else {
+
+formObj.timeStart = $('#timeStart').val();
+formObj.timeEnd = $('#timeEnd').val();
+}
+
+
+//grab the miles values and validate the odometer digits
+let mileStart = $('#mileStart').val();
+let mileEnd = $('#mileEnd').val(); 
+
+//I will have to validate the odo fields separately now
+let isMileStartValid = validateLastFour(mileStart);
+let isMileEndValid = validateLastFour(mileEnd);
+
+if (!isMileStartValid) {
+$('#loader').hide();
+alert('Please enter the beginning odometer (last 4)');
+$('#mileStart').focus();
+$('#btnSubmit').attr('disabled', false);
+
+} else if(!isMileEndValid){
+$('#loader').hide();
+alert('Please enter the ending odometer (last 4)');
+$('#mileEnd').focus();
+$('#btnSubmit').attr('disabled', false);
+
+} else {
+formObj.mileStart = $('#mileStart').val();
+formObj.mileEnd = $('#mileEnd').val();
+}
+
+//grab the selectCompany and selectLocation values
+let companyName = $('#selectCompany').val();
+let location = $('#selectLocation').val();
+
+if (!companyName) {
+$('#loader').hide();
+alert('Company name required.');
+$('#selectCompany').focus();
+$('#btnSubmit').attr('disabled', false);
+
+} else if (location == 'make selection') {
+$('#loader').hide();
+alert("Location required");
+$('#selectLocation').focus();
+$('#btnSubmit').attr('disabled', false);
+} else {
+formObj.companyName = companyName;
+formObj.location = location;
+}
+
+//capture the parts info
+formObj.partsQty1 = $('#partsQty1').val();
+formObj.partsDesc1 = $('#partsDesc1').val();
+
+//capture the notes
+let notesText = $('#notes').val();
+formObj.genNotes = notesText;
+
+
+//what is the meterCount?
+let meterCount = $('#appending').children().length;
+
+//my unpacking key
+formObj.meterCount = meterCount;
+
+//my suitcase 
+formObj.meters = [];
+
+for (let i = 0; i < meterCount; i++) {
+
+//capture the meter locations
+let meterLocation = $("#meterDiv" + i + " select").val() + " | ";
+
+//capture the meter comments
+let meterComments = " | " + $("#meterDiv" + i + " input[type=text]").val();
+if(meterComments.length <= 3){meterComments = ""};
+
+//capture the checked boxes for the current meterDiv
+let tasksCompleted = $("#meterDiv" + i + " input[type=checkbox]:checked");
+let tskLen = tasksCompleted.length;
+let taskList = "";
+for(let j = 0; j < tskLen; j++){
+let taskName = tasksCompleted[j].id;
+let lastCharIndex = taskName.length - 1;
+taskName = taskName.slice(0,lastCharIndex)
+taskList += taskName + ", ";
+}
+
+//write that shit somewhere! 
+formObj.meters[i] = meterLocation + taskList + meterComments;
+
+};
+console.log(formObj); //HELL YES!!! By its beauty stunned am I!
+return formObj;
+};
+
+
+$('#selectCompany').change(function () {
+let companyName = $('#selectCompany').val();
+$('#loader').show();
+google.script.run.withSuccessHandler(createLocationListHtml).createLocationListArr(companyName);
+});
+
+
+
+function createLocationListHtml(locationsListArr) {
+let companyName = $('#selectCompany').val();
+let len = locationsListArr.length - 1;
+let locationListHtml = '';
+for (let i = 0; i < len; i++) {
+locationListHtml += `<option>${locationsListArr[i]}</option>`;
+}
+
+if(len ==1 ){ 
+    google.script.run.withSuccessHandler(createMeterListHtml).createMeterListArr(locationsListArr[0], companyName);
+}
+$('#selectLocation').html(locationListHtml);
+$('#loader').hide();
+};
+
+
+$('#selectLocation').change(function () {
+let companyLocation = $('#selectLocation').val();
+let companyName = $('#selectCompany').val();
+$('#loader').show();
+google.script.run.withSuccessHandler(createMeterListHtml).createMeterListArr(companyLocation, companyName);
+});
+
+//create the meter lists and populate all the existing drop-downs
+function createMeterListHtml(meterListArr){
+let len = meterListArr.length;
+let meterListHtml = '';
+
+for (let i = 1; i < len; i++) {
+meterListHtml += `<option>${meterListArr[i][0]}</option>`;
+}
+$('.jsMeterList').html(meterListHtml);
+$('#loader').hide();
+};
+
+
+
+
+$('#btnSubmitAddLocForm').click(function (e) {
+$('#btnSubmitAddLocForm').attr('disabled', true);
+
+let locObj = {
+"companyName": $("#selectCompany").val(),
+"locationName": $("#newLocName").val(),
+"newMeterId": $("#newMeterId").val() 
+}
+
+if($("#newMeterId").val() == "" || $("#newLocName").val() == "" ){
+$('#btnSubmitAddLocForm').attr('disabled', false);
+alert("all fields are required");
+} else {
+google.script.run.withSuccessHandler(endScene).addNewLocation(locObj);
+    function endScene(msg){
+        alert(msg);
+            resetAddLocForm()
+      }
+}
+})
+
+function resetAddLocForm(){
+//generic reset
+document.getElementById('addLocationForm').reset();
+//my back to the wall, a victim of laughing chance/ this is, for me, the essence of true romance
+$("#newLocName").val("");
+$("#newMeterId").val("");
+$('#btnSubmitAddLocForm').attr('disabled', false);
+}
+
+$("#btnResetAddLocForm").click(function(){
+resetAddLocForm()
+})
+
+$('#btnSubmit').click(function (e) {
+e.preventDefault();
+
+$('#btnSubmit').attr('disabled', true);
+//let success = google.script.run.clickSubmit(validatingFormData());
+google.script.run.withSuccessHandler(wrapItUpButterCup).clickSubmit(validatingFormData());
+//i impress myself, happily. 
+})
+
+$('#btnReset').click(function (e) {
+e.preventDefault();       
+//call a reset function, fcol lol!
+resetThisTicket();
+})
+
+function resetThisTicket(){
+//generic reset
+document.getElementById('formFieldTicket').reset();
+
+$("#selectLocation").html("<option disabled selected>select location</option>");
+
+
+//initialize meter segment
+let resetMeterSegment = '<div id="meterDiv0" class="row times">\
+<div class="input-field col s12 topmar25 step">\
+<select id="selectMeterName0" class="browser-default step jsMeterList">\
+<option disabled selected>STEP 1: Select meter name</option>\
+</select>\
+</div>\
+<div id="tasks0" class="row">\
+<p class="col s12 topmar25 step">STEP 2: Select all tasks performed</p>\
+<div class="col s6 topmar25">\
+<label for = "MeterProving0">\
+<input type="checkbox" id="MeterProving0" class="filled-in"/>\
+<span> Meter proving </span>\
+</label >\
+</div>\
+<div class="col s6 topmar25">\
+<label for = "GrindOut0">\
+<input type="checkbox" id="GrindOut0" class="filled-in"/>\
+<span> Grindout </span>\
+</label>\
+</div>\
+<div class="col s6 topmar25">\
+<label for = "RVP0">\
+<input type="checkbox" id="RVP0" class="filled-in" />\
+<span> RVP </span>\
+</label>\
+</div>\
+<div class="col s6 topmar25">\
+<label>\
+<input type="checkbox" id="Other0" class="filled-in" />\
+<span> Other </span>\
+</label>\
+</div>\
+<div class="input-field col s12">\
+<input id="meterComments0" type="text" />\
+<label for = "meterComments0"> Comments </label>\
+</div>\
+</div>\
+</div>\
+</div>';
+
+
+$('#appending').html(resetMeterSegment).appendTo($('#appending'));
+
+$('#btnSubmit').attr('disabled', false);
+$('#loader').hide();
+};
+
+
+function wrapItUpButterCup(success) {
+if (success) {
+alert('Field ticket submitted successfully.');
+//and then call a reset function
+resetThisTicket();
+google.script.run.nowComethThePDF();
+}
+}
+
+
+
+
+$(document).ready(function () {
+
+google.script.run.withSuccessHandler(createCompanyDropDown).getCompanyNameList();
+
+     function createCompanyDropDown(namesArray){
+      let len = namesArray.length;
+      let htmlOption = "";
+      for(let i = 0; i < len; i++){ 
+        htmlOption += `<option>${namesArray[i]}</option>`
+        } 
+       $("#selectCompany").append(htmlOption);
+      };
+});
+</script>
