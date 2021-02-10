@@ -9,9 +9,6 @@ This responsive web application captures field operations data and saves the dat
     - also filters meter names based on selection location 
 - add as many meter sections as needed per location
 - all fields are required -- alert reminders for empty fields
-- app checks to make sure time is chronological
-    - wait, what?
-    - lol
 - form data is written to the Sheets db for billing purposes
 - the DFT Data workbook contains custom menu items for easy db maintenance
     - add missing field tickets
@@ -41,5 +38,7 @@ View in screenshots folder
 This code creates a Google Sheets application and utilizes App Script.
 
 - copy the code in the SRC folder to your Sheets project
-    - the .js files are the .GS files, all others are html files
+    - the Code.js file is the .GS file, all others are html files
+
+
 
